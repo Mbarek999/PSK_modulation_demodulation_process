@@ -17,6 +17,5 @@ Data Processing: Signal filtering, data acquisition, diagnostics
 A Simulink-based project focusing on system simulation and control logic.
 Exploring opportunities for my final-year internship (PFE) in embedded system development.
 📫 Let's Connect
-Email: mbarkkabous999@gmail.com
 LinkedIn:https://www.linkedin.com/in/m-barek-el-kabbous-077086201/
 
