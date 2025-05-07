@@ -1,94 +1,98 @@
-  PSK modulation/demodulation on simulink
-This project demonstrates how to simulate a PSK (Phase Shift Keying) communication system in Simulink, including modulation, transmission through a noisy channel, and demodulation.
+# PSK Modulation/Demodulation Simulation with Simulink
 
-Project Overview
-We model a digital communication system where:
+## Overview
+This project implements a complete **Phase Shift Keying (PSK)** communication system in Simulink, demonstrating digital signal transmission through noisy channels. The system includes modulation, AWGN channel simulation, and demodulation with noise filtering - providing a practical framework for understanding digital communications.
 
-A binary signal (representing sensor data or control commands) is modulated using PSK.
+## Key Features
+- **BPSK Modulation**: Binary phase shifts (0° and 180°) of a 4Hz carrier signal
+- **Noisy Channel**: Realistic AWGN simulation with configurable SNR (default: 10dB)
+- **Demodulation**: Coherent detection with Chebyshev filtering (20th-order low-pass)
+- **Validation**: MIL/SIL testing workflows for simulation and embedded deployment
+- **Visualization**: Comparative signal analysis at each processing stage
 
-The modulated signal is transmitted through a noisy channel (simulated using AWGN).
+## System Architecture
+```mermaid
+graph LR
+    A[Binary Input] --> B(PSK Modulator)
+    B --> C[AWGN Channel]
+    C --> D(PSK Demodulator)
+    D --> E[Chebyshev Filter]
+    E --> F[Recovered Output]
+```
 
-The receiver demodulates the signal and recovers the original data using a Chebyshev filter.
+## Implementation Details
 
-The goal is to ensure reliable data transmission even in the presence of noise.
+### Modulation
+- **Carrier Wave**: 4Hz, 4V amplitude
+- **Encoding**:
+  - Binary 0 → 0° phase
+  - Binary 1 → 180° phase shift
 
-Key Components
-1. Modulation (PSK - Phase Shift Keying)
-The binary signal (0s and 1s) is encoded by shifting the phase of a carrier wave (4 Hz, 4V amplitude).
+### Channel Model
+- **Noise Type**: Additive White Gaussian Noise (AWGN)
+- **Configurable Parameters**:
+  - SNR (default: 10dB)
+  - Noise power spectral density
 
-Phase shifts:
+### Demodulation
+- **Coherent Detection**: Mixing with reference carrier
+- **Filter Specifications**:
+  - Type: Chebyshev I Low-pass
+  - Order: 20
+  - Cutoff: 10 rad/s
+  - Passband ripple: 2dB
 
-0° → Binary "0"
+## Getting Started
 
-180° → Binary "1"
+### Requirements
+- MATLAB R2021a or later
+- Simulink
+- DSP System Toolbox
+- Embedded Coder (for SIL testing)
 
-2. Transmission Channel (AWGN - Additive White Gaussian Noise)
-Simulates real-world noise in communication (e.g., wireless or wired interference).
+### Installation
+1. Clone the repository
+2. Open `PSK_ModDemod.slx` in MATLAB
 
-SNR (Signal-to-Noise Ratio): Set to 10 dB (adjustable).
+### Basic Usage
+1. Run simulation to observe signal processing chain
+2. Adjust parameters via:
+   ```matlab
+   set_param('PSK_ModDemod/AWGN_Channel', 'SNR', '15') % Example SNR change
+   ```
+3. View signals on connected Scope blocks
 
-3. Demodulation & Filtering
-The received signal is mixed with the original carrier to recover the baseband signal.
+## Advanced Features
+- **Model-in-Loop (MIL) Testing**:
+  - Validate model behavior before code generation
+  - Verify signal integrity metrics
 
-A Chebyshev low-pass filter removes high-frequency noise:
+- **Software-in-Loop (SIL)**:
+  - Generate ARM Cortex-M compatible C code
+  - Processor-in-Loop (PIL) options available
 
-Filter order: 20 (aggressive filtering for better noise removal).
+## Expected Results
+| Signal Stage | Characteristics |
+|--------------|-----------------|
+| Original | Clean binary waveform |
+| Modulated | Phase-shifted carrier |
+| Noisy | Signal with visible distortion |
+| Recovered | Restored binary signal |
 
-Cutoff frequency: 10 rad/s.
+## Troubleshooting
+- **Simulation Errors**:
+  - Verify all toolboxes are installed
+  - Check sample rate consistency
+- **Filter Instability**:
+  - Reduce filter order if needed
+  - Adjust cutoff frequency
 
-Simulation Steps
-1. Model Setup (Simulink Blocks)
-Signal Source → PSK Modulator → AWGN Channel → PSK Demodulator → Chebyshev Filter → Output.
+## License
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
-Visualization: Scope blocks display:
+## References
+1. Proakis, J.G., "Digital Communications", 5th Ed.
+2. MathWorks Documentation: PSK Modulation
 
-Original binary signal
-
-Modulated PSK signal
-
-Noisy transmitted signal
-
-Recovered signal after filtering
-
-2. Testing & Validation
-MIL (Model-in-the-Loop):
-
-Simulate the model in Simulink to verify correct behavior.
-
-Check signal integrity before and after transmission.
-
-SIL (Software-in-the-Loop):
-
-Generate embedded C code (compatible with ARM Cortex-M).
-
-Validate real-time performance on hardware.
-
-Results
-Successful demodulation even with added noise.
-
-The Chebyshev filter effectively removes noise while preserving signal shape.
-
-The final output matches the original input, proving the system’s reliability.
-
-How to Use This Project
-Open the Simulink model (PSK_ModDemod.slx).
-
-Run the simulation to see the signal at each stage.
-
-Adjust parameters (e.g., SNR, filter settings) for different noise conditions.
-
-Generate C code (for embedded deployment) if needed.
-
-
-Requirements
-MATLAB & Simulink (R2021a or later).
-
-DSP System Toolbox (for filter design).
-
-Embedded Coder (for SIL testing and code generation).
-
-Conclusion
-This simulation demonstrates a practical PSK communication system that can be adapted for real-world applications like sensor networks, wireless control, or digital telemetry.
-
-For questions or improvements, feel free to contribute! 🚀
-
+---
+*For support or contributions, please open an issue or submit a pull request.*
